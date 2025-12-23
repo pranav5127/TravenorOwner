@@ -1,6 +1,7 @@
 package com.pranav.travenorowner.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -32,13 +33,14 @@ fun PlaceCard(
     modifier: Modifier = Modifier,
     title: String = "Kolkata Reservoir",
     location: String = "Kolkata, India",
-    price: String = "$894",
+    price: String = "$84",
     imageRes: Int,
-    onCardClick: () -> Unit = {}
+    onCardClick: () -> Unit
 ) {
     Card(
         modifier = modifier
-            .width(220.dp),
+            .width(220.dp)
+            .clickable(onClick = {onCardClick()}),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFFFFFFFF)

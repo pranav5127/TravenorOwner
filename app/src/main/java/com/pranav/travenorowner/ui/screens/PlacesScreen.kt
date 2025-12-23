@@ -33,7 +33,7 @@ import com.pranav.travenorowner.ui.components.SearchBar
 fun PlacesScreen(
     modifier: Modifier = Modifier,
     onCancel: () -> Unit = {},
-    onCardClick: () -> Unit = {}
+    onCardClick: () -> Unit
 ) {
     var query by remember { mutableStateOf("") }
 
@@ -95,7 +95,9 @@ fun PlacesScreen(
                     title = "Kolkata Reservoir",
                     location = "Kolkata, India",
                     price = "$894",
-                    imageRes = R.drawable.img_1
+                    imageRes = R.drawable.img_1,
+                    onCardClick = onCardClick
+
                 )
             }
 
@@ -104,7 +106,9 @@ fun PlacesScreen(
                     title = "Bombay Tirtugas",
                     location = "Bombay, India",
                     price = "$894",
-                    imageRes = R.drawable.img_2
+                    imageRes = R.drawable.img_2,
+                    onCardClick = onCardClick
+
                 )
             }
 
@@ -113,7 +117,8 @@ fun PlacesScreen(
                     title = "Bombay Tirtugas",
                     location = "Bombay, India",
                     price = "$894",
-                    imageRes = R.drawable.img_2
+                    imageRes = R.drawable.img_2,
+                    onCardClick = onCardClick
                 )
             }
             item {
@@ -121,7 +126,8 @@ fun PlacesScreen(
                     title = "Bombay Tirtugas",
                     location = "Bombay, India",
                     price = "$894",
-                    imageRes = R.drawable.img_2
+                    imageRes = R.drawable.img_2,
+                    onCardClick = onCardClick
                 )
             }
             item {
@@ -129,7 +135,8 @@ fun PlacesScreen(
                     title = "Bombay Tirtugas",
                     location = "Bombay, India",
                     price = "$894",
-                    imageRes = R.drawable.img_2
+                    imageRes = R.drawable.img_2,
+                    onCardClick = onCardClick
                 )
             }
             item {
@@ -137,7 +144,8 @@ fun PlacesScreen(
                     title = "Bombay Tirtugas",
                     location = "Bombay, India",
                     price = "$894",
-                    imageRes = R.drawable.img_2
+                    imageRes = R.drawable.img_2,
+                    onCardClick = onCardClick
                 )
             }
 
@@ -148,5 +156,5 @@ fun PlacesScreen(
 @Preview(showBackground = true)
 @Composable
 fun PreviewPlacesScreen() {
-    PlacesScreen()
+    PlacesScreen(onCardClick = {})
 }
