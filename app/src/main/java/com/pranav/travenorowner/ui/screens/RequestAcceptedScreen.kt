@@ -12,11 +12,12 @@ import com.pranav.travenorowner.ui.components.RequestCard
 import com.pranav.travenorowner.ui.components.RequestHeader
 import com.pranav.travenorowner.R
 @Composable
-fun AcceptedScreen(
+fun RequestAcceptedScreen(
+    modifier: Modifier = Modifier,
     onDone: () -> Unit
 ) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -41,6 +42,8 @@ fun AcceptedScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewAccepted() {
-    AcceptedScreen {}
+fun PreviewRequestAccepted() {
+    RequestAcceptedScreen(
+        onDone = {}
+    )
 }

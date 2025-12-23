@@ -1,7 +1,16 @@
+import java.util.Properties
+import kotlin.apply
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
+}
+
+val localProperties = Properties().apply {
+    load(rootProject.file("local.properties").inputStream())
 }
 
 android {
@@ -18,6 +27,17 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "SUPABASE_URL",
+            "\"${localProperties.getProperty("SUPABASE_URL") ?: ""}\""
+        )
+        buildConfigField(
+            "String",
+            "SUPABASE_ANON_KEY",
+            "\"${localProperties.getProperty("SUPABASE_ANON_KEY") ?: ""}\""
+        )
     }
 
     buildTypes {
@@ -29,15 +49,12 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+       jvmToolchain(11)
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -65,4 +82,46 @@ dependencies {
 
     // Extended Icons
     implementation(libs.androidx.compose.material.icons.extended.android)
+
+
+    // On boarding
+    implementation(libs.foundation.pager)
+
+    // Navigation3 dependencies
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.android.navigation3.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+
+    // Serialization dependency
+    implementation(libs.kotlinx.serialization.json)
+
+    // Koin dependency
+    implementation(libs.koin.android)
+    implementation(libs.koin.core)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.coroutines)
+    implementation(libs.koin.compose.viewmodel)
+    implementation(libs.koin.annotation)
+    ksp(libs.koin.ksp.compiler)
+
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.android.test)
+    testImplementation(libs.mockito)
+
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
+    // supabase
+    implementation(platform(libs.supabase.bom))
+    implementation(libs.auth.kt)
+    implementation(libs.ktor.client.okhttp)
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    implementation("io.github.jan-tennert.supabase:realtime-kt")
+
+    // Coil
+    implementation("io.coil-kt.coil3:coil-compose:3.3.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
+
+
 }

@@ -31,12 +31,14 @@ import com.pranav.travenorowner.ui.components.SearchBar
 
 @Composable
 fun PlacesScreen(
-    onCancel: () -> Unit = {}
+    modifier: Modifier = Modifier,
+    onCancel: () -> Unit = {},
+    onCardClick: () -> Unit = {}
 ) {
     var query by remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(Color.White)
             .padding(horizontal = 20.dp)

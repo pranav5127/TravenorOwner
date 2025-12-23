@@ -5,7 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.pranav.travenorowner.ui.screens.PlacesScreen
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.rememberNavBackStack
+import com.pranav.travenorowner.ui.navigation.NavigationRoot
+import com.pranav.travenorowner.ui.navigation.Routes
 import com.pranav.travenorowner.ui.theme.TravenorOwnerTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,8 +17,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val startDestination: NavKey = Routes.PlacesScreen
+            val backStack = rememberNavBackStack(startDestination)
             TravenorOwnerTheme {
-                PlacesScreen()
+                NavigationRoot(backStack = backStack)
             }
         }
     }
