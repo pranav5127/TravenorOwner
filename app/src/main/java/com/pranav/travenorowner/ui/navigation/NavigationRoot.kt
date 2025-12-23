@@ -2,58 +2,84 @@ package com.pranav.travenorowner.ui.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
-import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.pranav.travenorowner.ui.model.BookingState
 import com.pranav.travenorowner.ui.screens.NewRequestScreen
 import com.pranav.travenorowner.ui.screens.PlacesScreen
 import com.pranav.travenorowner.ui.screens.RequestAcceptedScreen
+import com.pranav.travenorowner.ui.viewmodel.BookingViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun NavigationRoot(
     backStack: NavBackStack<NavKey>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: BookingViewModel = koinViewModel()
 ) {
-    Scaffold(modifier = modifier) { innerPadding ->
+    LaunchedEffect(Unit) {
+        viewModel.navigateToRequest.collect {
+            if (backStack.lastOrNull() !is Routes.NewRequestScreen) {
+                backStack.add(Routes.NewRequestScreen)
+            }
+        }
+    }
+
+    val selectedPlace by viewModel.selectedPlace.collectAsState()
+
+    Scaffold { innerPadding ->
         NavDisplay(
             backStack = backStack,
-            entryDecorators = listOf(
-                rememberSaveableStateHolderNavEntryDecorator(),
-                rememberViewModelStoreNavEntryDecorator()
-            ),
             entryProvider = { route ->
-                when(route) {
+                when (route) {
+
                     is Routes.PlacesScreen -> NavEntry(route) {
                         PlacesScreen(
                             modifier = modifier.padding(innerPadding),
-                            onCardClick = {
+                            onPlaceClick = { id ->
+                                viewModel.selectPlace(id)
                                 backStack.add(Routes.NewRequestScreen)
                             }
                         )
                     }
-                    is Routes.NewRequestScreen -> NavEntry(route) {
-                        NewRequestScreen(
-                            modifier = modifier.padding(innerPadding),
-                            onAccept = {},
-                            onReject = {}
-                        )
-                    }
-                    is Routes.RequestAcceptedScreen -> NavEntry(route) {
-                        RequestAcceptedScreen(
-                            modifier = modifier.padding(innerPadding),
-                            onDone = {}
-                        )
-                    }
-                    else -> throw IllegalArgumentException("Invalid route: $route")
-                }
 
+                    is Routes.NewRequestScreen -> NavEntry(route) {
+                        when (selectedPlace?.bookingState) {
+
+                            BookingState.ACCEPTED -> {
+                                RequestAcceptedScreen(
+                                    modifier = modifier.padding(innerPadding),
+                                    onDone = {
+                                        backStack.removeLastOrNull()
+                                    }
+                                )
+                            }
+
+                            else -> {
+                                NewRequestScreen(
+                                    modifier = modifier.padding(innerPadding),
+                                    place = selectedPlace,
+                                    onAccept = {
+                                        selectedPlace?.let {
+                                            viewModel.accept(it.id)
+                                        }
+                                    },
+                                    onReject = {
+                                        viewModel.reject(selectedPlace!!.id)
+                                        backStack.removeLastOrNull()
+                                    }
+                                )
+                            }
+                        }
+                    }
+
+                    else -> error("Unknown route")
+                }
             }
         )
-
     }
 }

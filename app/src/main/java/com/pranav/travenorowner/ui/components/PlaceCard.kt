@@ -1,6 +1,5 @@
 package com.pranav.travenorowner.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,67 +20,63 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 
 @Composable
 fun PlaceCard(
     modifier: Modifier = Modifier,
-    title: String = "Kolkata Reservoir",
-    location: String = "Kolkata, India",
-    price: String = "$84",
-    imageRes: Int,
+    title: String,
+    location: String,
+    price: String,
+    imageUrl: String?,
     onCardClick: () -> Unit
 ) {
     Card(
         modifier = modifier
             .width(220.dp)
-            .clickable(onClick = {onCardClick()}),
+            .clickable { onCardClick() },
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFFFFFFF)
-        ),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
         Column {
-            // Image
-            Image(
-                painter = painterResource(id = imageRes),
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(imageUrl)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth()
                     .height(160.dp)
-                    .clip(RoundedCornerShape( 20.dp))
+                    .clip(RoundedCornerShape(20.dp))
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp)
-            ) {
-                // Title
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Text(
                     text = title,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.Black
+                    fontWeight = FontWeight.SemiBold
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))
 
-                // Location row
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.LocationOn,
-                        contentDescription = "Location",
+                        contentDescription = null,
                         tint = Color.Gray,
                         modifier = Modifier.size(16.dp)
                     )
@@ -97,7 +92,6 @@ fun PlaceCard(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Price
                 Row {
                     Text(
                         text = price,
