@@ -33,7 +33,8 @@ fun PlaceCard(
     title: String = "Kolkata Reservoir",
     location: String = "Kolkata, India",
     price: String = "$894",
-    imageRes: Int
+    imageRes: Int,
+    onCardClick: () -> Unit = {}
 ) {
     Card(
         modifier = modifier
@@ -51,6 +52,7 @@ fun PlaceCard(
                 contentDescription = title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
+                    .padding(8.dp)
                     .fillMaxWidth()
                     .height(160.dp)
                     .clip(RoundedCornerShape( 20.dp))

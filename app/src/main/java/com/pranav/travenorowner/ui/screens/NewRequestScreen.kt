@@ -15,11 +15,12 @@ import com.pranav.travenorowner.ui.components.RequestHeader
 import com.pranav.travenorowner.R
 @Composable
 fun NewRequestScreen(
+    modifier: Modifier = Modifier,
     onAccept: () -> Unit,
     onReject: () -> Unit
 ) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -45,6 +46,6 @@ fun NewRequestScreen(
 @Preview(showBackground = true)
 @Composable
 fun PreviewNewRequest() {
-    NewRequestScreen({}, {})
+    NewRequestScreen(modifier = Modifier,{}, {})
 }
 
