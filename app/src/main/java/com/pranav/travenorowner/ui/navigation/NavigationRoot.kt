@@ -30,7 +30,10 @@ fun NavigationRoot(
                 when(route) {
                     is Routes.PlacesScreen -> NavEntry(route) {
                         PlacesScreen(
-                            modifier = modifier.padding(innerPadding)
+                            modifier = modifier.padding(innerPadding),
+                            onCardClick = {
+                                backStack.add(Routes.NewRequestScreen)
+                            }
                         )
                     }
                     is Routes.NewRequestScreen -> NavEntry(route) {
